@@ -1,13 +1,37 @@
 [package]
-name = "rust-arduino-blink"
+name = "rust-my-balls"
 version = "0.1.0"
+authors = ["mpaulson <mpaulson@netflix.com>"]
 edition = "2021"
+license = "MIT OR Apache-2.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "rust-my-balls"
+test = false
+bench = false
 
 [dependencies]
-# A panic handler is needed.  This is a crate with the most basic one.
 panic-halt = "0.2.0"
+ufmt = "0.1.0"
+nb = "0.1.2"
+embedded-hal = "0.2.3"
+hd44780-driver = "0.4.0"
+ag-lcd = "0.1.2"
 
-[dependencies.arduino-uno]
-git = "https://github.com/Rahix/avr-hal"
+[dependencies.arduino-hal]
+git = "https://github.com/rahix/avr-hal"
+rev = "1aacefb335517f85d0de858231e11055d9768cdf"
+features = ["arduino-uno"]
+
+# Configure the build for minimal size - AVRs have very little program memory
+[profile.dev]
+panic = "abort"
+lto = true
+opt-level = "s"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+debug = true
+lto = true
+opt-level = "s"
