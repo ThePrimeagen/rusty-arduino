@@ -12,7 +12,7 @@ fn read_str<T:embedded_hal::serial::Read<u8>> (reader: &mut T, buf: &mut [u8], o
         return (offset, false);
     }
 
-    let done = false;
+    let mut done = false;
     while let Ok(byte) = curr_byte {
         if byte == 0 {
             done = true;
@@ -87,10 +87,11 @@ fn main() -> ! {
         lcd.set_position(0, 0);
 
     loop {
-        let (o, done) = read_str(&mut serial, &mut buf, offset);
+        let (o, _done) = read_str(&mut serial, &mut buf, offset);
 
         offset += o;
 
+        /*
         // lcd.print("test loop");
         if done {
             for idx in 0..offset {
@@ -103,6 +104,7 @@ fn main() -> ! {
                 lcd.print(str);
             }
         }
+        */
 
         led.toggle();
         arduino_hal::delay_ms(1000);
